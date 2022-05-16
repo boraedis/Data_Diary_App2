@@ -1,0 +1,19 @@
+<script src="https://www.gstatic.com/firebasejs/6.0.0/firebase.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyC72egxTj840NsQUU5wtqcAmXwjVJektZ8",
+        authDomain: "data-diary-1693.firebaseapp.com",
+        projectId: "data-diary-1693",
+        storageBucket: "data-diary-1693.appspot.com",
+        messagingSenderId: "671002423805",
+        appId: "1:671002423805:web:eb3c6d7fab1aec81ab6994",
+        measurementId: "G-LBT0GQPND8"
+    };
+    firebase.initializeApp(firebaseConfig);
+    firebase.auth()
+    firebase.auth().signOut().then(() => {
+        window.location = 'index.html'
+    }).catch((error) => {
+        // An error happened.
+    });
+</script>
