@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
 
-import { db, app, auth } from './index.js'
+import { db, app, auth } from './firebaseInit.js'
 
 
 document.getElementById('submit').addEventListener('click', function() {
@@ -20,6 +20,6 @@ document.getElementById('submit').addEventListener('click', function() {
         } else {
             document.getElementById('notification').innerText = "This is user is not in our system"
         }
-        document.getElementById('notification').hidden = false
+        document.getElementById('notification').style.display = "none";
     })
 })
