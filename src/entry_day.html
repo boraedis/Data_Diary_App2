@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bora Edis</title>
+    <link rel="stylesheet" href="./../css/mystyles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <div class="navbar-item">
+                    <a class="navbar-item" href="index.html">
+                        Home
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item" href="entry.html">
+                        <strong>Data Input</strong>
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item">
+                        Graphs
+                    </a>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="signup.html" id="signup">
+                            Sign up
+                        </a>
+                        <a class="button is-light" href="login.html" id="loginout">
+                            Log in
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <br>
+    <div class="container">
+        <div class="tile is-ancestor has-text-centere">
+            <div class="tile is-parent is-2 has-text-centered">
+                <button class="tile is-child notification is-secondary" onclick="yesterday()" style="border-radius: 15pt; padding-right: 1.5rem; border-width: 0;">
+                    <p class="subtitle" id="yesterday" style="line-height: 1.5;">Yesterday</p>
+                </button>
+            </div>
+            <div class="tile is-parent has-text-centered">
+                <article class="tile is-child notification is-secondary" style="border-radius: 15pt; padding-right: 1.5rem;">
+                    <p class="title" id="date">Today</p>
+                </article>
+            </div>
+            <div class="tile is-parent is-2 has-text-centered">
+                <button class="tile is-child notification is-secondary" onclick="tomorrow()" style="border-radius: 15pt; padding-right: 1.5rem; border-width: 0;">
+                    <p class="subtitle" id="tomorrow" style="line-height: 1.5;">Tomorrow</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- <div class="columns has-text-centered" name="header">
+            <div class="column notification is-2" style="border-radius: 15pt;">
+                <p class="subtitle" id="yesterday">Yesterday</p>
+            </div>
+            <div class="column notification" style="border-radius: 15pt;">
+                <p class="title" id="date">Today</p>
+            </div>
+            <div class="column notification is-2" style="border-radius: 15pt;">
+                <p class="subtitle" id="tomorrow">Tomorrow</p>
+            </div>
+        </div> -->
+        <!-- <nav class="level" name="header">
+            <div class="level-item notification" style="border-radius: 15pt;">
+                Yesterday
+            </div>
+            <div class="level-item notification" style="border-radius: 15pt;">
+                <p class="title" id="date">Today</p>
+            </div>
+            <div class="level-item notification" style="border-radius: 15pt;">
+                Yesterday
+            </div>
+        </nav> -->
+    </div>
+    <br>
+    <div class="container">
+        <div class="columns" name="cols">
+            <div class="column">
+            </div>
+            <div class="column">
+            </div>
+        </div>
+    </div>
+    <script type="module" src="firebaseInit.js"></script>
+    <script type="module" src="entry_day.js"></script>
+</body>
+
+
+</html>
