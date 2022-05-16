@@ -59,4 +59,13 @@ async function getDB(coll, sortby = null, reverse = false) {
     return table
 }
 
-export { db, app, auth, getDB }
+function processQuery() {
+    var query = {}
+    var parameters = location.search.substring(1).split("&")
+    parameters.forEach((param) => {
+        query[param.split('=')[0]] = param.split('=')[1]
+    })
+    return query
+}
+
+export { db, app, auth, getDB, processQuery }
