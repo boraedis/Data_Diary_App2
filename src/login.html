@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bora Edis</title>
+    <link rel="stylesheet" href="./../css/mystyles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <div class="navbar-item">
+                    <a class="navbar-item" href="index.html">
+                        <strong>Home</strong>
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item">
+                        Data Input
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item">
+                        Graphs
+                    </a>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="signup.html" id="signup">
+                            Sign up
+                        </a>
+                        <a class="button is-light" href="login.html" id="loginout">
+                            <strong>Log in</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <form class="box" method="dialog">
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                    <input class="input" id="emailField" type="email" placeholder="e.g. alex@example.com">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Password</label>
+                <div class="control">
+                    <input class="input" id="passwordField" type="password" placeholder="********">
+                </div>
+            </div>
+
+            <button class="button is-primary" id="submit">Log in</button>
+            <a class="button is-secondary" href="signup.html">Sign up</a>
+            <div class="block"></div>
+            <div class="notification is-primary" id="notification" hidden>
+                <button class="delete"></button>Hello
+            </div>
+        </form>
+    </div>
+    <script type="module" src="index.js"></script>
+    <script type="module" src="login.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+{
+    "name": "Data_Diary_App2",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.html",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "Bora Edis",
+    "license": "ISC",
+    "dependencies": {
+        "firebase": "^9.8.1",
+        "webpack": "^5.72.1",
+        "webpack-cli": "^4.9.2"
+    }
+}
