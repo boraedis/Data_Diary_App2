@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bora Edis</title>
+    <link rel="stylesheet" href="./../../css/mystyles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <div class="navbar-item">
+                    <a class="navbar-item" href="../index.html">
+                        Home
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item" href="../entry.html">
+                        <strong>Data Input</strong>
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item">
+                        Graphs
+                    </a>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="../signup.html" id="signup">
+                            Sign up
+                        </a>
+                        <a class="button is-light" href="../login.html" id="loginout">
+                            Log in
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="height: 95%;">
+        <form name="entryform" action="" method="post">
+            <div class="card">
+
+                <div class="card-content">
+                    <p class="title is-2" id="date" style="color: white;">DATE ERROR</p>
+                    <p class="subtitle is-3">
+                        Social Media
+                    </p>
+
+                    <!-- FORM FIELDS GO HERE -->
+                    <div class="field is-horizontal" style="width: 90%;">
+                        <div class="field-label is-normal">
+                            <label class="label">Instagram Followers</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="field has-addons">
+                                    <p class="control is-expanded">
+                                        <input class="input" type="number" name="insta_followers" id="insta_followers" step="1" onchange="this.value = parseInt(this.value);">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-horizontal" style="width: 90%;">
+                        <div class="field-label is-normal">
+                            <label class="label">Instagram Following</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="field has-addons">
+                                    <p class="control is-expanded">
+                                        <input class="input" type="number" name="insta_following" id="insta_following" step="1" onchange="this.value = parseInt(this.value);">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- END FORM FIELDS -->
+                    <div class="notification is-warning" id="alert" hidden>
+                        <button class="delete"></button>
+                    </div>
+                    <br>
+                    <div class="tile is-ancestor has-text-centered">
+                        <div class="tile is-parent is-2 has-text-centered">
+                            <button class="tile is-child notification is-secondary" style="border-radius: 15pt; padding-right: 1.5rem;" type="button">
+                                <p class="subtitle" id="yesterday" style="line-height: 1.5;">Yesterday</p>
+                            </button>
+                        </div>
+                        <div class="tile is-parent is-8 has-text-centered">
+                            <button class="tile is-child notification is-primary" style="border-radius: 15pt; padding-right: 1.5rem;" type="button" id="submit_button">
+                                <p class="subtitle" style="line-height: 1.5;">Submit</p>
+                            </button>
+                        </div>
+                        <div class="tile is-parent is-2 has-text-centered">
+                            <button class="tile is-child notification is-secondary" style="border-radius: 15pt; padding-right: 1.5rem;" type="button">
+                                <p class="subtitle" id="tomorrow" style="line-height: 1.5;">Tomorrow</p>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tile is-ancestor has-text-centered">
+                        <div class="tile is-parent has-text-centered">
+                            <button class="tile is-child notification is-danger" style="border-radius: 15pt; padding-right: 1.5rem;" type="button">
+                            <p class="subtitle" id="clear" style="line-height: 0.5;">Clear</p>
+                        </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <script type="module" src="./../firebaseInit.js"></script>
+    <script type="module" src="social media.js"></script>
+</body>
+
+
+</html>
