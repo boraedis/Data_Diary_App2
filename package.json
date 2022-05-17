@@ -10,8 +10,6 @@
     "author": "Bora Edis",
     "license": "ISC",
     "dependencies": {
-        "firebase": "^9.8.1",
-        "webpack": "^5.72.1",
-        "webpack-cli": "^4.9.2"
+        "firebase": "^9.8.1"
     }
 }

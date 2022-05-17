@@ -31,34 +31,6 @@ onAuthStateChanged(auth, (user) => {
 
 const db = getFirestore(app);
 
-async function getDB(coll, sortby = null, reverse = false) {
-    var table = []
-    var querySnapshot = await collection(db, coll)
-
-    querySnapshot.forEach((doc) => {
-        let item = doc.data()
-        item.id = doc.id
-        table.push(item)
-    })
-    if (!(sortby === null)) {
-        table.sort(function(a, b) {
-            let out = 0;
-            if (a[sortby] < b[sortby]) {
-                out = 1
-            }
-            if (a[sortby] > b[sortby]) {
-                out = -1
-            }
-            if (reverse) {
-                return out * -1
-            } else {
-                return out
-            }
-        })
-    }
-    return table
-}
-
 function processQuery() {
     var query = {}
     var parameters = location.search.substring(1).split("&")
@@ -68,4 +40,4 @@ function processQuery() {
     return query
 }
 
-export { db, app, auth, getDB, processQuery }
+export { db, app, auth, processQuery }

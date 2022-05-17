@@ -1,6 +1,6 @@
 import { collection, query, orderBy, limit, doc, getDocs, documentId, where, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js"
 
-import { db, app, auth, processQuery } from "./firebaseInit.js";
+import { db, app, auth, processQuery } from "./../firebaseInit.js";
 
 var url_query = processQuery()
 
@@ -26,6 +26,9 @@ function tomorrow() {
     window.location = location.pathname + q
 }
 
+document.getElementById('yesterday').addEventListener('click', yesterday)
+document.getElementById('tomorrow').addEventListener('click', tomorrow)
+
 function createTab(name, max) {
     var tab = document.createElement('div')
     tab.classList = ['tile notification is-primary']
@@ -33,7 +36,7 @@ function createTab(name, max) {
     tab.style['padding-right'] = '0'
     tab.style['margin-bottom'] = '1.5rem'
     var link = document.createElement('a')
-    link.href = 'entry/' + name + '.html' + location.search
+    link.href = name + '.html' + location.search
     link.appendChild(tab)
         // tab.setAttribute('onclick', 'entry/' + name + '.html')
         // tab.onclick = function(event) {
@@ -78,7 +81,7 @@ function createTab(name, max) {
 async function main() {
     var cols = document.getElementsByName('cols')[0].childNodes
     var count = 0
-    var structure = await getDocs(query(collection(db, "entry_structure"), orderBy('rank', 'desc')))
+    var structure = await getDocs(query(collection(db, "entry_structure"), orderBy('rank')))
     structure.forEach((cat) => {
         var tab = createTab(cat.id, cat.data().fields.length)
         if (count % 2 == 0) {

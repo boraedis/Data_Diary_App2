@@ -1,6 +1,6 @@
 import { collection, query, orderBy, doc, getDocs, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
 
-import { db, app, auth, getDB } from './firebaseInit.js'
+import { db, app, auth } from './firebaseInit.js'
 
 
 async function links() {
