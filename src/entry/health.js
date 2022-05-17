@@ -1,6 +1,6 @@
-import { doc, deleteField, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
+import { collection, query, orderBy, doc, deleteField, getDoc, updateDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
 
-import { db, processQuery } from '../firebaseInit.js'
+import { db, app, auth, processQuery } from '../firebaseInit.js'
 
 var url_query = processQuery()
 
@@ -44,39 +44,43 @@ document.getElementById('submit_button').addEventListener('click', async functio
     alert.hidden = true
 
     // IMPORTS
-    let happiness = document.getElementById('happiness').value
-    let reason = document.getElementById('reason').value
+    let distancewalked = document.getElementById('distancewalked').value
+    if (document.getElementById('workedout-yes').checked) {
+        let workedout = true
+    } else {
+        let workedout = false
+    }
 
     // DATA VALIDATION
 
 
-    if ((happiness > 100) | (happiness < 0)) {
-        alert.innerText = "Happiness must be between 0 to 100"
+    if (distancewalked < 0) {
+        alert.innerText = "Distance walked must be greater than 0"
         alert.hidden = false
         return
     }
 
     var date = document.getElementById('date').innerText
     var save_data = {}
-    if (happiness == "") {
-        save_data['happiness'] = deleteField()
+    if (distancewalked == "") {
+        save_data['distancewalked'] = deleteField()
     } else {
-        save_data['happiness'] = parseFloat(happiness)
+        save_data['distancewalked'] = parseFloat(distancewalked)
     }
-    if (reason == "") {
-        save_data['reason'] = deleteField()
+    if (!(document.getElementById('workedout-yes').checked) & !(document.getElementById('workedout-no').checked)) {
+        save_data['workedout'] = deleteField()
     } else {
-        save_data['reason'] = reason
+        save_data['workedout'] = workedout
     }
 
     var day = doc(db, 'days', url_query['day'])
     console.log(save_data)
     updateDoc(day, save_data)
-    updateDoc(doc(db, 'views', 'happiness'), {
-        [url_query['day']]: save_data['happiness']
+    updateDoc(doc(db, 'views', 'distancewalked'), {
+        [url_query['day']]: save_data['distancewalked']
     })
-    await updateDoc(doc(db, 'views', 'reason'), {
-        [url_query['day']]: save_data['reason']
+    await updateDoc(doc(db, 'views', 'workedout'), {
+        [url_query['day']]: save_data['workedout']
     })
     location.reload()
 })
@@ -88,12 +92,18 @@ async function main() {
     document.getElementById('date').textContent = day_data['date']
     document.getElementById('date').style.color = '#000000'
 
-    if ('happiness' in day_data) {
+    if ('distancewalked' in day_data) {
         // console.log(day_data.sleeptime.toDate().toTimeString().split(' ')[0])
-        document.getElementById('happiness').value = day_data.happiness
+        document.getElementById('distancewalked').value = day_data.distancewalked
     }
-    if ('reason' in day_data) {
-        document.getElementById('reason').value = day_data.reason
+    if ('workedout' in day_data) {
+        if (day_data.workedout) {
+            document.getElementById('workedout-yes').checked = true
+            document.getElementById('workedout-no').checked = false
+        } else {
+            document.getElementById('workedout-yes').checked = false
+            document.getElementById('workedout-no').checked = true
+        }
     }
 }
 
