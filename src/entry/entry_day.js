@@ -101,18 +101,16 @@ async function main() {
     structure.forEach((cat) => {
         let entered = 0
         cat.data().fields.forEach((col) => {
-            if (day_data[col]) {
+            if (typeof(day_data[col]) != 'undefined') {
                 entered++
             }
         })
+        console.log(cat.id, entered)
         var prog = document.getElementById(cat.id + '-progress')
         prog.value = entered
         document.getElementById(cat.id + '-label').innerText = entered / prog.max * 100 + '%'
         count++
     })
-
-
-
 }
 
 

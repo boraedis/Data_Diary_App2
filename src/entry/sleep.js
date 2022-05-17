@@ -96,18 +96,6 @@ document.getElementById('submit_button').addEventListener('click', async functio
     let naphour = document.getElementById('naphour').value
     let napmin = document.getElementById('napmin').value
 
-    if (naphour == "") {
-        naphour = 0
-    } else {
-        naphour = parseInt(naphour)
-    }
-
-    if (napmin == "") {
-        napmin = 0
-    } else {
-        napmin = parseInt(napmin)
-    }
-
     // DATA VALIDATION
 
     if (((sleeptime == '') & !(waketime == '')) | !(sleeptime == '') & (waketime == '')) {
@@ -125,6 +113,18 @@ document.getElementById('submit_button').addEventListener('click', async functio
     }
 
     var date = document.getElementById('date').innerText
+    var delete_nap = false
+
+    if ((naphour == "") & (napmin == "")) {
+        delete_nap = true
+        naphour = deleteField()
+        napmin = deleteField()
+    } else {
+        if (naphour == '') { naphour = 0 } else { naphour = parseInt(naphour) }
+        if (napmin == '') { napmin = 0 } else { napmin = parseInt(napmin) }
+    }
+
+
     var save_data = {
         'naphour': naphour,
         'napmin': napmin,
@@ -163,9 +163,15 @@ document.getElementById('submit_button').addEventListener('click', async functio
     updateDoc(doc(db, 'views', 'waketime'), {
         [url_query['day']]: save_data['waketime']
     })
-    await updateDoc(doc(db, 'views', 'naps'), {
-        [url_query['day']]: save_data['naphour'] + save_data['naphour'] / 60
-    })
+    if (delete_nap) {
+        await updateDoc(doc(db, 'views', 'naps'), {
+            [url_query['day']]: deleteField()
+        })
+    } else {
+        await updateDoc(doc(db, 'views', 'naps'), {
+            [url_query['day']]: save_data['naphour'] + save_data['naphour'] / 60
+        })
+    }
     location.reload()
 })
 
