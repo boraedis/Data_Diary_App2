@@ -72,7 +72,8 @@ async function main() {
         max_day++
         date_cur.setDate(date_cur.getDate() + 1)
         setDoc(doc(db, 'days', max_day.toString()), {
-            date: date_cur.toDateString()
+            date: date_cur.toDateString(),
+            day: max_day
         })
         console.log(max_day, date_cur)
         console.log('added')
