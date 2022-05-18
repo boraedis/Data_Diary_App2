@@ -117,39 +117,14 @@
                     </div>
 
                     <!-- END FORM FIELDS -->
-                    <div class="notification is-warning" id="alert" hidden>
-                        <button class="delete"></button>
-                    </div>
-                    <br>
-                    <div class="tile is-ancestor has-text-centered">
-                        <div class="tile is-parent is-2 has-text-centered">
-                            <button class="tile is-child notification is-secondary" style="border-radius: 15pt; padding-right: 1.5rem;" type="button">
-                                <p class="subtitle" id="yesterday" style="line-height: 1.5;">Yesterday</p>
-                            </button>
-                        </div>
-                        <div class="tile is-parent is-8 has-text-centered">
-                            <button class="tile is-child notification is-primary" style="border-radius: 15pt; padding-right: 1.5rem;" type="button" id="submit_button">
-                                <p class="subtitle" style="line-height: 1.5;">Submit</p>
-                            </button>
-                        </div>
-                        <div class="tile is-parent is-2 has-text-centered">
-                            <button class="tile is-child notification is-secondary" style="border-radius: 15pt; padding-right: 1.5rem;" type="button">
-                                <p class="subtitle" id="tomorrow" style="line-height: 1.5;">Tomorrow</p>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="tile is-ancestor has-text-centered">
-                        <div class="tile is-parent has-text-centered">
-                            <button class="tile is-child notification is-danger" style="border-radius: 15pt; padding-right: 1.5rem;" type="button">
-                            <p class="subtitle" id="clear" style="line-height: 0.5;">Clear</p>
-                        </button>
-                        </div>
+                    <div id="console">
                     </div>
                 </div>
             </div>
         </form>
 
     </div>
+    <script type="module" src="entry_console.js"></script>
     <script type="module" src="./../firebaseInit.js"></script>
     <script type="module" src="sleep.js"></script>
 </body>

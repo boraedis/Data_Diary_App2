@@ -4,39 +4,6 @@ import { db, processQuery } from './../firebaseInit.js'
 
 var url_query = processQuery()
 
-function yesterday() {
-    var url_query = processQuery()
-    url_query.day = parseInt(url_query.day) - 1
-    var q = '?'
-    for (let x in url_query) {
-        q = q + x + '=' + url_query[x] + '&'
-    }
-    q = q.slice(0, q.length - 1)
-    window.location = location.pathname + q
-}
-
-function tomorrow() {
-    var url_query = processQuery()
-    url_query.day = parseInt(url_query.day) + 1
-    var q = '?'
-    for (let x in url_query) {
-        q = q + x + '=' + url_query[x] + '&'
-    }
-    q = q.slice(0, q.length - 1)
-    window.location = location.pathname + q
-}
-
-function clear() {
-    var inputs = document.getElementsByTagName('input')
-    for (let i = 0; i < inputs.length; i++) {
-        inputs[i].value = ''
-    }
-}
-
-document.getElementById('yesterday').addEventListener('click', yesterday)
-document.getElementById('tomorrow').addEventListener('click', tomorrow)
-document.getElementById('clear').addEventListener('click', clear)
-
 function updatesleep() {
     console.log('updating text')
     let sleepval = document.getElementById('sleeptime').value
@@ -84,8 +51,7 @@ function updatesleep() {
     }
 }
 
-
-document.getElementById('submit_button').addEventListener('click', async function submitform() {
+async function submitform() {
     console.log('submitting form!!')
     let alert = document.getElementById('alert')
     alert.hidden = true
@@ -113,22 +79,18 @@ document.getElementById('submit_button').addEventListener('click', async functio
     }
 
     var date = document.getElementById('date').innerText
-    var delete_nap = false
+    var save_data = {}
 
     if ((naphour == "") & (napmin == "")) {
-        delete_nap = true
-        naphour = deleteField()
-        napmin = deleteField()
+        save_data['naps'] = deleteField()
     } else {
-        if (naphour == '') { naphour = 0 } else { naphour = parseInt(naphour) }
-        if (napmin == '') { napmin = 0 } else { napmin = parseInt(napmin) }
+        save_data['naps'] = {}
+        if (naphour == '') { save_data['naps'].hours = 0 } else { save_data['naps'].hours = parseInt(naphour) }
+        if (napmin == '') { save_data['naps'].mins = 0 } else { save_data['naps'].mins = parseInt(napmin) }
     }
 
 
-    var save_data = {
-        'naphour': naphour,
-        'napmin': napmin,
-    }
+
 
     if (sleeptime != '') {
         sleeptime = sleeptime.split(':')
@@ -156,28 +118,22 @@ document.getElementById('submit_button').addEventListener('click', async functio
     console.log(save_data)
     console.log(url_query['day'])
     updateDoc(day, save_data)
-    console.log(parseInt(save_data['naphour']) + parseInt(save_data['naphour']) / 60)
     updateDoc(doc(db, 'views', 'sleeptime'), {
         [url_query['day']]: save_data['sleeptime']
     })
     updateDoc(doc(db, 'views', 'waketime'), {
         [url_query['day']]: save_data['waketime']
     })
-    if (delete_nap) {
-        await updateDoc(doc(db, 'views', 'naps'), {
-            [url_query['day']]: deleteField()
-        })
-    } else {
-        await updateDoc(doc(db, 'views', 'naps'), {
-            [url_query['day']]: save_data['naphour'] + save_data['naphour'] / 60
-        })
-    }
+    await updateDoc(doc(db, 'views', 'naps'), {
+        [url_query['day']]: save_data['naps']
+    })
     location.reload()
-})
+}
 
 
 async function main() {
     var day_data = await getDoc(doc(db, "days", url_query['day']))
+    document.getElementById('submit_button').addEventListener('click', submitform)
     day_data = day_data.data()
     document.getElementById('date').textContent = day_data['date']
     document.getElementById('date').style.color = '#000000'
@@ -189,11 +145,9 @@ async function main() {
     if ('waketime' in day_data) {
         document.getElementById('waketime').value = day_data.waketime
     }
-    if ('naphour' in day_data) {
-        document.getElementById('naphour').value = day_data.naphour
-    }
-    if ('napmin' in day_data) {
-        document.getElementById('napmin').value = day_data.napmin
+    if ('naps' in day_data) {
+        document.getElementById('naphour').value = day_data.naps.hours
+        document.getElementById('napmin').value = day_data.naps.mins
     }
 
 }

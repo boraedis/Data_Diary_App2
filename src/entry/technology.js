@@ -4,40 +4,7 @@ import { db, processQuery } from '../firebaseInit.js'
 
 var url_query = processQuery()
 
-function yesterday() {
-    var url_query = processQuery()
-    url_query.day = parseInt(url_query.day) - 1
-    var q = '?'
-    for (let x in url_query) {
-        q = q + x + '=' + url_query[x] + '&'
-    }
-    q = q.slice(0, q.length - 1)
-    window.location = location.pathname + q
-}
-
-function tomorrow() {
-    var url_query = processQuery()
-    url_query.day = parseInt(url_query.day) + 1
-    var q = '?'
-    for (let x in url_query) {
-        q = q + x + '=' + url_query[x] + '&'
-    }
-    q = q.slice(0, q.length - 1)
-    window.location = location.pathname + q
-}
-
-function clear() {
-    var inputs = document.getElementsByTagName('input')
-    for (let i = 0; i < inputs.length; i++) {
-        inputs[i].value = ''
-    }
-}
-
-document.getElementById('yesterday').addEventListener('click', yesterday)
-document.getElementById('tomorrow').addEventListener('click', tomorrow)
-document.getElementById('clear').addEventListener('click', clear)
-
-document.getElementById('submit_button').addEventListener('click', async function submitform() {
+async function submitform() {
     console.log('submitting form!!')
     let alert = document.getElementById('alert')
     alert.hidden = true
@@ -120,11 +87,12 @@ document.getElementById('submit_button').addEventListener('click', async functio
         [url_query['day']]: save_data['laptopusage']
     })
     location.reload()
-})
+}
 
 
 async function main() {
     var day_data = await getDoc(doc(db, "days", url_query['day']))
+    document.getElementById('submit_button').addEventListener('click', submitform)
     day_data = day_data.data()
     document.getElementById('date').textContent = day_data['date']
     document.getElementById('date').style.color = '#000000'
