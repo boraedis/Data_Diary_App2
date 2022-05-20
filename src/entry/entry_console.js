@@ -31,6 +31,10 @@ function clear() {
     }
 }
 
+function groups() {
+    location = 'entry_day.html' + location.search
+}
+
 fetch('entry_console.html')
     .then(res => res.text())
     .then(text => {
@@ -41,4 +45,5 @@ fetch('entry_console.html')
         document.getElementById('yesterday').addEventListener('click', yesterday)
         document.getElementById('tomorrow').addEventListener('click', tomorrow)
         document.getElementById('clear').addEventListener('click', clear)
+        document.getElementById('groups').addEventListener('click', groups)
     })
