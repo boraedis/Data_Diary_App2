@@ -40,4 +40,13 @@ function processQuery() {
     return query
 }
 
-export { db, app, auth, processQuery }
+function createQuery(url_query) {
+    var query = '?'
+    for (let param in url_query) {
+        query = query + param + '=' + url_query[param] + '&'
+    }
+    query = query.slice(0, -1)
+    return query
+}
+
+export { db, app, auth, processQuery, createQuery }

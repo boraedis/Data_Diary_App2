@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bora Edis</title>
+    <link rel="stylesheet" href="./../../../css/mystyles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/14b0c82d0d.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <div class="navbar-item">
+                    <a class="navbar-item" href="./../../index.html">
+                        Home
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item" href="./../home.html">
+                        <strong>Data Input</strong>
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item">
+                        Graphs
+                    </a>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="signup.html" id="signup">
+                            Sign up
+                        </a>
+                        <a class="button is-light" href="login.html" id="loginout">
+                            Log in
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <br>
+    <div class="container">
+        <div class="card">
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <span class="icon is-large">
+                            <i class="fa-solid fa-user-astronaut fa-2x"></i>
+                        </span>
+                    </div>
+                    <div class="media-content">
+                        <p class="title is-2" id="name">John Smith</p>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <div class="field">
+                        <label class="label">Birthdate</label>
+                        <div class="control">
+                            <input class="input" id="birthdate" type="date">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Gender</label>
+                        <div class="control">
+                            <input class="input" type="text" id="gender">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Nicknames</label> Enter nicknames seperated by commas
+                        <div class="control">
+                            <input class="input" type="text" id="nicknames" placeholder="Nick,Rob,Tom" autocomplete="off">
+                        </div>
+                    </div>
+                    <div id="console">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="database_console.js"></script>
+    <script type="module" src="./../../firebaseInit.js"></script>
+    <script type="module" src="person.js"></script>
+</body>
+
+
+</html>

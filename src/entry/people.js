@@ -148,6 +148,8 @@ function addPositive(person) {
             selected[i.toString()] = person
             person.selected = true
             console.log(selected)
+            search.value = ''
+            search.focus()
             updateSearch()
             updateLabels()
             return
@@ -161,6 +163,8 @@ function addNegative(person) {
             selected[(-1 * i).toString()] = person
             person.selected = true
             console.log(selected)
+            search.value = ''
+            search.focus()
             updateSearch()
             updateLabels()
             return
