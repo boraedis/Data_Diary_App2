@@ -26,40 +26,27 @@ async function submitform() {
     let alert = document.getElementById('alert')
     alert.hidden = true
 
-    // IMPORTS
-    let happiness = document.getElementById('happiness').value
-    let reason = document.getElementById('reason').value
+    console.log(selected)
 
-    // DATA VALIDATION
+    var saveday = {}
+    var saveview = {}
 
-
-    if ((happiness > 100) | (happiness < 0)) {
-        alert.innerText = "Happiness must be between 0 to 100"
-        alert.hidden = false
-        return
+    for (let col in selected) {
+        if (selected[col] != null) {
+            saveday['person' + col] = selected[col].name
+            saveview['person' + col] = selected[col].name
+        } else {
+            saveday['person' + col] = deleteField()
+        }
     }
 
-    var date = document.getElementById('date').innerText
-    var save_data = {}
-    if (happiness == "") {
-        save_data['happiness'] = deleteField()
-    } else {
-        save_data['happiness'] = parseFloat(happiness)
+    updateDoc(doc(db, "days", url_query['day']), saveday)
+    if (Object.keys(saveview).length === 0) {
+        console.log(1)
+        saveview = deleteField()
     }
-    if (reason == "") {
-        save_data['reason'] = deleteField()
-    } else {
-        save_data['reason'] = reason
-    }
-
-    var day = doc(db, 'days', url_query['day'])
-    console.log(save_data)
-    updateDoc(day, save_data)
-    updateDoc(doc(db, 'views', 'happiness'), {
-        [url_query['day']]: save_data['happiness']
-    })
-    await updateDoc(doc(db, 'views', 'reason'), {
-        [url_query['day']]: save_data['reason']
+    await updateDoc(doc(db, 'views', 'people'), {
+        [url_query['day']]: saveview
     })
     location.reload()
 }
@@ -114,6 +101,21 @@ function removeSelected(i) {
     if (i > 7) { ind = 7 - i }
     selected[ind.toString()].selected = false
     selected[ind.toString()] = null
+
+    for (let p = 1; p < 7; p++) {
+        if (selected[p.toString()] == null) {
+            selected[p.toString()] = selected[(p + 1).toString()]
+            selected[(p + 1).toString()] = null
+        }
+    }
+
+    for (let p = -1; p > -3; p--) {
+        if (selected[p.toString()] == null) {
+            selected[p.toString()] = selected[(p - 1).toString()]
+            selected[(p - 1).toString()] = null
+        }
+    }
+
     updateLabels()
     updateSearch()
 
@@ -155,10 +157,12 @@ function addPositive(person) {
             return
         }
     }
+    search.value = ''
+    search.focus()
 }
 
 function addNegative(person) {
-    for (let i = 1; i < 8; i++) {
+    for (let i = 1; i < 4; i++) {
         if (selected[(-1 * i).toString()] == null) {
             selected[(-1 * i).toString()] = person
             person.selected = true
@@ -170,6 +174,8 @@ function addNegative(person) {
             return
         }
     }
+    search.value = ''
+    search.focus()
 }
 
 function addPanel(person) {
@@ -332,7 +338,17 @@ async function main() {
     day_data = day_data.data()
     document.getElementById('date').textContent = day_data['date']
     document.getElementById('date').style.color = '#000000'
-
+    console.log(day_data)
+    for (let i = 1; i < 11; i++) {
+        var ind = i
+        if (i > 7) { ind = 7 - i }
+        if (day_data['person' + ind]) {
+            console.log(people[day_data['person' + ind]])
+            selected[ind.toString()] = people[day_data['person' + ind]];
+        }
+    }
+    updateSearch()
+    updateLabels()
 }
 
 main()
