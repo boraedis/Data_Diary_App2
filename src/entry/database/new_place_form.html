@@ -1,0 +1,143 @@
+<div id="location_fields" style="padding-bottom: 0.75rem;">
+    <div class="field">
+        <label class="label">Country</label>
+        <div class="field has-addons">
+            <div class="control has-icons-left is-expanded">
+                <div class="select is-fullwidth">
+                    <select class="is-expanded" id="countries" name="select">
+                    <option selected>Add New Country</option>
+                </select>
+                </div>
+                <div class="icon is-small is-left">
+                    <i class="fas fa-globe"></i>
+                </div>
+            </div>
+        </div>
+        <!-- <button class="button is-success is-rounded">X</button> -->
+    </div>
+</div>
+<button class="button is-fullwidth" id="subregion" style="display:none"> Add New Sub-Region</button>
+
+<div class="field">
+    <label class="label">Name</label>
+    <div class="control">
+        <input class="input" type="text" id="name" placeholder="John Doe's House" autocomplete="off">
+    </div>
+</div>
+
+<div class="field" id="color_field" style="display: block;">
+    <label class="label">Color</label>
+    <div class="field has-addons">
+        <p class="control">
+            <a class="button is-static">
+              #
+            </a>
+        </p>
+        <div class="control is-expanded">
+            <input class="input" type="text" id="color" placeholder="FF8800" autocomplete="off">
+        </div>
+    </div>
+</div>
+<div class="field">
+    <label class="label">Address</label>
+    <div class="field has-addons">
+        <p class="control">
+            <input class="input" id="streetnumber" type="text" placeholder="Street Number">
+        </p>
+        <p class="control has-icons-left is-expanded">
+            <input class="input" id="streetname" type="text" placeholder="Street Name">
+            <span class="icon is-small is-left">
+                <i class="fa-solid fa-road"></i>
+            </span>
+        </p>
+    </div>
+</div>
+<div class="field">
+    <label class="label">Category</label>
+    <div class="field is-grouped has-addons">
+        <div class="control is-expanded" style="margin-right: 0rem;">
+            <div class="select is-fullwidth">
+                <select id="category">
+                    <option selected>Select Category</option>
+                </select>
+            </div>
+        </div>
+        <div class="control" style="margin-right: 0rem;">
+            <button class="button" id="add_category">
+                <div class="icon">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </button>
+        </div>
+
+        <div class="control is-expanded" style="margin-right: 0rem;">
+            <div class="select is-fullwidth">
+                <select id="subcategory" disabled>
+                    <option selected>Select Sub-Category</option>
+                </select>
+            </div>
+        </div>
+        <div class="control" style="margin-right: 0rem;">
+            <button class="button" id="add_subcategory" disabled>
+                <div class="icon">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="notification is-warning" id="category_warning" hidden>
+    Category has not been selected if you would like to proceed press Submit again
+</div>
+<div class="notification is-warning" id="subcategory_warning" hidden>
+    Sub-Category has not been selected if you would like to proceed press Submit again
+</div>
+<div class="notification is-danger" id="new_place_alert" hidden>
+
+</div>
+
+<div class="modal" id="addLevelModal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">New Region</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <p id="path"></p>
+            <div class="field" id="subregion_name_field">
+                <label class="label">Subregion Name</label>
+                <div class="control">
+                    <input class="input" type="text" id="subregion_name" placeholder="e.g. State, Province, City, Neighborhood, Location" autocomplete="off">
+                </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success" id="new_region_submit">Add</button>
+            <button class="button">Cancel</button>
+        </footer>
+    </div>
+</div>
+
+<div class="modal" id="add_category_modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">New Category</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <p id="cat_path"></p>
+            <div class="field" id="subregion_name_field">
+                <label class="label">Category Name</label>
+                <div class="control">
+                    <input class="input" type="text" id="category_name" autocomplete="off">
+                </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success" id="new_category_submit">Add</button>
+            <button class="button">Cancel</button>
+        </footer>
+    </div>
+</div>
