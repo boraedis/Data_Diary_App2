@@ -7,7 +7,8 @@ var world
 var location_fields
 var cats
 
-if (location.pathname.split('/').length) {
+if (location.pathname.split('/').length == 4) {
+    console.log(location.pathname)
     htmlfile = './database/new_place_form.html'
 } else {
     htmlfile = './new_place_form.html'
@@ -30,11 +31,15 @@ fetch(htmlfile)
         });
         (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
             const $target = $close.closest('.modal');
-            if ((!($close.id == 'new_region_submit')) & (!($close.id == 'new_place_submit'))) {
-                $close.addEventListener('click', () => {
-                    $target.classList.remove('is-active');
-                    console.log($close.id + ' closed the modal')
-                });
+            if ($target.id == 'loadingModal') {
+
+            } else {
+                if ((!($close.id == 'new_region_submit')) & (!($close.id == 'new_place_submit'))) {
+                    $close.addEventListener('click', () => {
+                        $target.classList.remove('is-active');
+                        console.log($close.id + ' closed the modal')
+                    });
+                }
             }
         });
         document.getElementById('new_region_submit').addEventListener('click', createRegion)

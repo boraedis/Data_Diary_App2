@@ -128,7 +128,6 @@ function updateSearch() {
         }
         count++
     }
-    console.log(selected)
 }
 
 function addLocation(place) {
@@ -248,13 +247,11 @@ async function main() {
     document.getElementById('date').textContent = day_data['date']
     document.getElementById('date').style.color = '#000000'
     console.log(day_data)
-    for (let i = 1; i < 11; i++) {
-        var ind = i
-        if (i > 7) { ind = 7 - i }
-        if (day_data['place' + ind]) {
-            console.log(places[day_data['place' + ind]])
-            selected[ind.toString()] = places[day_data['place' + ind]];
-        }
+    if (day_data['place1']) {
+        selected['1'] = places[day_data['place1']];
+    }
+    if (day_data['place2']) {
+        selected['2'] = places[day_data['place2']];
     }
     updateSearch()
     updateLabels()
