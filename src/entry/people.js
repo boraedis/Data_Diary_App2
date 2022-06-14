@@ -33,8 +33,8 @@ async function submitform() {
 
     for (let col in selected) {
         if (selected[col] != null) {
-            saveday['person' + col] = selected[col].name
-            saveview['person' + col] = selected[col].name
+            saveday['person' + col] = selected[col].id
+            saveview['person' + col] = selected[col].id
         } else {
             saveday['person' + col] = deleteField()
         }
@@ -217,12 +217,13 @@ async function addPanels() {
     people = await getDoc(doc(db, "searchs", 'people'))
     people = people.data()
     for (let person in people) {
-        people[person].name = person
+        people[person].id = person
         people[person].selected = false
-        people[person].nicknames.push(person)
+        people[person].nicknames.push(people[person].name)
         addPanel(people[person])
     }
     search.addEventListener('input', updateSearch)
+    console.log(people)
 }
 
 async function submitNewPerson() {
@@ -259,12 +260,18 @@ async function submitNewPerson() {
         save['nicknames'] = []
     }
     var names = await getDoc(doc(db, 'searchs', 'people'))
-
+    names = names.data()
+    if (save['name'] in names) {
+        alert.innerText = 'This name already exists.'
+        alert.hidden = false
+        return
+    }
     var ref = await addDoc(collection(db, 'people'), save)
+    console.log('added', ref)
     updateDoc(doc(db, 'searchs', 'people'), {
-        [save['name']]: {
+        [ref.id]: {
             nicknames: save['nicknames'],
-            path: ref
+            name: save['name']
         }
     })
     this.closest('.modal').classList.remove('is-active');

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bora Edis</title>
+    <link rel="stylesheet" href="./../../css/mystyles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/14b0c82d0d.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <div class="navbar-item">
+                    <a class="navbar-item" href="../index.html">
+                        Home
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item" href="home.html">
+                        <strong>Data Input</strong>
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item">
+                        Graphs
+                    </a>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="../signup.html" id="signup">
+                            Sign up
+                        </a>
+                        <a class="button is-light" href="../login.html" id="loginout">
+                            Log in
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="height: 95%;">
+        <div class="card">
+
+            <div class="card-content" style="padding-top: 0rem;">
+                <p class="title is-2" id="date" style="color: white;">DATE ERROR</p>
+                <p class="subtitle is-3">
+                    Entertainment
+                </p>
+
+                <!-- FORM FIELDS GO HERE -->
+                <div class="tile is-ancestor is-fluid" style="height: 500px;">
+                    <div class="tile is-parent">
+                        <div class="tile notification is-secondary is-vertical" style="text-align: center; border-radius: 15pt; padding-right: 1.5rem;" id="labels">
+                        </div>
+                    </div>
+                    <div class="tile is-parent is-vertical">
+                        <div class="tile notification is-secondary is-vertical" style="text-align: center; border-radius: 15pt; padding-right: 1.5rem; margin-bottom: 0.5rem; height: 450px;">
+                            <nav class="panel" style="width: 100%; margin: 0;">
+                                <div class="panel-block" style="box-shadow: none;">
+                                    <div class="field has-addons" style="width: 100%;">
+                                        <div class="control has-icons-left is-expanded">
+                                            <input class="input" type="text" id="search" placeholder="Search..." autocomplete="off">
+                                            <span class="icon is-left">
+                                                <i class="fas fa-search" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <button class="button is-secondary" id="APIsearch">Search API</button>
+                                    </div>
+                                </div>
+                            </nav>
+                            <nav class="panel" id="searchPanel" style="width: 100%;overflow: auto;">
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <!-- END FORM FIELDS -->
+                <div id="console">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="APIsearchModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">New Media Results</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body" id="modal_content">
+
+            </section>
+            <footer class="modal-card-foot">
+                <div class="button is-success" id="new_person_submit">Submit</div>
+                <button class="button">Cancel</button>
+            </footer>
+        </div>
+    </div>
+    <script type="module" src="entry_console.js"></script>
+    <script type="module" src="./../firebaseInit.js"></script>
+    <script type="module" src="entertainment.js"></script>
+</body>
+
+
+</html>

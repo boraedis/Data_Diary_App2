@@ -1,4 +1,4 @@
-import { collection, updateDoc, doc, getDocs, deleteDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js"
+import { collection, updateDoc, doc, getDocs, deleteDoc, setDoc, getDoc, deleteField } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js"
 
 import { db } from "../../firebaseInit.js";
 
@@ -7,14 +7,16 @@ var search = document.getElementById('search')
 var labels = document.getElementById('labels')
 var level_columns = document.getElementById('level_columns')
 var places
+var places_search
 var cats
 var editing = false
 var selected_place
-var world
+var world = {}
 var current_tab = 0
 
 
 function change_tab(tab_num) {
+    console.log('changing tab', tab_num)
     if (current_tab == tab_num) {
         return
     }
@@ -35,6 +37,8 @@ function change_tab(tab_num) {
             buttons[t].parentElement.classList = ['']
         }
     }
+
+    current_tab = tab_num
 }
 // PLACE INFORMATION
 
@@ -334,6 +338,8 @@ function addPanel(place) {
     sp.append(pb)
 }
 async function addPanels() {
+    places_search = await getDoc(doc(db, 'searchs', 'places'))
+    places_search = places_search.data()
     places = await getDoc(doc(db, "searchs", 'places'))
     places = places.data()
     console.log(places)
@@ -348,9 +354,13 @@ async function addPanels() {
 // WORLD VIEW
 
 async function loadWorldView() {
-    world = await getDocs(collection(db, 'world'))
+    var world_data = await getDocs(collection(db, 'world'))
+    world_data.forEach((country) => {
+        world[country.id] = country.data()
+    })
+    level_columns.innerHTML = ''
     var col = document.createElement('div')
-    col.classList = ['column is-3']
+    col.classList = ['column is-3 level_column']
     level_columns.appendChild(col)
 
     var tile = document.createElement('div')
@@ -359,19 +369,435 @@ async function loadWorldView() {
     col.appendChild(tile)
 
     var title = document.createElement('div')
-    title.classList = ['title is-3']
+    title.classList = ['title is-4']
     title.innerText = "World"
     tile.appendChild(title)
+    for (let r in world) {
+        var level = document.createElement('div')
+        level.classList = ['notification is-primary level']
+        level.style.padding = '0.5rem'
+        level.style.marginBottom = '0.25rem'
+        tile.appendChild(level)
 
-    world.forEach((country) => {
-        var text = document.createElement('div')
-        text.classList = ['tile is-child notification is-primary']
-        text.style.padding = '0.5rem'
-        text.style.marginBottom = '0.25rem'
-        tile.appendChild(text)
-        text.innerText = country.id
-    })
+        var left = document.createElement('div')
+        left.classList = ['level-left']
+        left.innerText = r
+        level.appendChild(left)
+
+        var right = document.createElement('div')
+        right.classList = ['level-right']
+        level.appendChild(right)
+
+        var edit = document.createElement('a')
+        edit.classList = ['icon']
+        edit.style.textDecoration = 'none'
+        edit.style.alignItems = 'right'
+        edit.onclick = function() { worldEdit([r]) }
+        var icon = document.createElement('i')
+        icon.classList = ["fa-solid fa-bars"]
+        edit.appendChild(icon)
+        right.appendChild(edit)
+
+        var open = document.createElement('a')
+        open.classList = ['icon']
+        open.style.textDecoration = 'none'
+        open.style.alignItems = 'right'
+        open.onclick = function() { addWorldLevel([r]) }
+        var icon = document.createElement('i')
+        icon.classList = ['fa-solid fa-angle-right']
+        open.appendChild(icon)
+        right.appendChild(open)
+    }
 }
+
+async function addWorldLevel(path) {
+    console.log('show info of', path)
+    var cols = document.getElementsByClassName('level_column')
+    while (cols.length > path.length) {
+        level_columns.removeChild(cols[cols.length - 1])
+        console.log(cols)
+    }
+
+    // while (level_columns.childNodes[path.length]) {
+    //     level_columns.removeChild(level_columns.lastChild)
+    // }
+
+    var col = document.createElement('div')
+    col.classList = ['column is-3 level_column']
+    col.name = 'level_column'
+    level_columns.appendChild(col)
+
+    var tile = document.createElement('div')
+    tile.classList = ['tile notification is-secondary is-vertical']
+    tile.style.height = '100%'
+    col.appendChild(tile)
+
+    var title = document.createElement('div')
+    title.classList = ['title is-4']
+    title.innerText = path[path.length - 1]
+    tile.appendChild(title)
+
+    var data = world[path[0]]
+    for (let p = 1; p < path.length; p++) {
+        console.log(data)
+        data = data.regions[path[p]]
+    }
+    console.log(data)
+
+    var regions = []
+    for (let reg in data.regions) {
+        regions.push(reg)
+    }
+    regions.sort()
+    console.log(regions)
+    for (let r in regions) {
+        r = regions[r]
+        var level = document.createElement('div')
+        level.classList = ['notification is-primary level']
+        level.style.padding = '0.5rem'
+        level.style.marginBottom = '0.25rem'
+        tile.appendChild(level)
+
+        var left = document.createElement('div')
+        left.classList = ['level-left']
+        left.innerText = r
+        if (r.length > 18) {
+            left.innerText = r.substring(0, 18)
+        } else {
+            left.innerText = r
+        }
+        level.appendChild(left)
+
+        var right = document.createElement('div')
+        right.classList = ['level-right']
+        level.appendChild(right)
+
+        var edit = document.createElement('a')
+        edit.classList = ['icon']
+        edit.style.textDecoration = 'none'
+        edit.style.alignItems = 'right'
+        edit.onclick = function() { worldEdit(path.concat([r])) }
+        var icon = document.createElement('i')
+        icon.classList = ["fa-solid fa-bars"]
+        edit.appendChild(icon)
+        right.appendChild(edit)
+
+        if (data.regions[r].regions) {
+            var open = document.createElement('a')
+            open.classList = ['icon']
+            open.style.textDecoration = 'none'
+            open.style.alignItems = 'right'
+            open.onclick = function() { addWorldLevel(path.concat([r])) }
+            var icon = document.createElement('i')
+            icon.classList = ['fa-solid fa-angle-right']
+            open.appendChild(icon)
+            right.appendChild(open)
+        }
+    }
+    level_columns.scrollLeft = level_columns.scrollWidth
+}
+
+async function worldEdit(path) {
+    console.log('show info of', path)
+
+    var cols = document.getElementsByClassName('level_column')
+    while (cols.length > path.length) {
+        level_columns.removeChild(cols[cols.length - 1])
+        console.log(cols)
+    }
+
+    var col = document.createElement('div')
+    col.classList = ['column is-6 level_column']
+    level_columns.appendChild(col)
+
+    var tile = document.createElement('div')
+    tile.classList = ['tile notification is-secondary is-vertical']
+    tile.style.height = '100%'
+    col.appendChild(tile)
+
+    var title = document.createElement('div')
+    title.classList = ['title is-5']
+    title.innerText = path[path.length - 1]
+    tile.appendChild(title)
+
+    var data = world[path[0]]
+    var selects = document.createElement('div')
+    selects.id = 'selects_area'
+
+
+
+    if (path.length == 1) {
+        var select = createSelect({ region_name: "Country", regions: world }, 0, [])
+        selects.appendChild(select)
+    } else {
+        var select = createSelect({ region_name: "Country", regions: world }, 0, [], path[0])
+        selects.appendChild(select)
+        for (let p = 1; p < path.length - 1; p++) {
+            selects.appendChild(createSelect(data, p, path.slice(0, p), path[p]))
+            console.log(data)
+            data = data.regions[path[p]]
+        }
+        selects.appendChild(createSelect(data, path.length - 1, path.slice(0, path.length - 1)))
+    }
+
+
+    var placeSnapshot = await getDoc(doc(db, 'places', data.id))
+    var place = placeSnapshot.data()
+    place.id = placeSnapshot.id
+
+    var fields = {
+        'id': 'ID',
+        'street_name': "Street Name",
+        'street_num': "Street Num",
+        'category': 'Category',
+        'sub-category': 'Sub-Category'
+    }
+    for (let f in fields) {
+        let text = document.createElement('p')
+        text.innerHTML = '<strong>' + fields[f] + '</strong>' + ' : ' + place[f]
+        tile.appendChild(text)
+    }
+    tile.appendChild(selects)
+
+    var block = document.createElement('br')
+    tile.appendChild(block)
+
+    var alert = document.createElement('div')
+    alert.classList = ['notification is-danger']
+    alert.hidden = true
+    alert.id = 'worldEditAlert'
+    tile.appendChild(alert)
+
+    var button = document.createElement('button')
+    button.classList = ['button is-success']
+    button.innerText = "Change Place's Position"
+    button.onclick = function() {
+        submitWorldEdit(path)
+    }
+    tile.appendChild(button)
+    level_columns.scrollLeft = level_columns.scrollWidth
+}
+
+async function addRegions(level, path) {
+    document.getElementById('subregion').style['display'] = 'none'
+    document.getElementById('worldEditAlert').hidden = true
+    var selects = document.getElementsByName('world_edit_select')
+    var fields = document.getElementById('selects_area')
+    console.log(level, path, selects)
+    var selection = selects[level - 1].value
+    console.log(fields.childNodes)
+    while (fields.childNodes[level]) {
+        console.log('delete')
+        fields.removeChild(fields.lastChild)
+        console.log(fields.childNodes)
+    }
+
+    var data = world
+    console.log(path)
+    for (let i = 0; i < level - 1; i++) {
+        data = data[path[i]].regions
+        console.log(data)
+    }
+    console.log(data, selection)
+    console.log(data[selection])
+    if ((typeof(data[selection]) != 'undefined')) {
+        if (typeof(data[selection].regions) != 'undefined') {
+            console.log("ADDING SELECT", data[selection].regions)
+            var region = data[selection]
+            var field = createSelect(region, level, path.concat([selection]))
+
+            fields.appendChild(field)
+        } else {
+            document.getElementById('subregion').style['display'] = 'block'
+        }
+    }
+}
+
+function createSelect(region, level, path, selected = false) {
+    console.log('creating select', region, level, path, selected)
+    var field = document.createElement('div')
+    field.classList = ['field']
+
+    var label = document.createElement('label')
+    label.classList = ['label']
+    label.innerText = region.region_name
+    field.appendChild(label)
+
+    var addons = document.createElement('div')
+    addons.classList = ['field has-addons']
+    field.appendChild(addons)
+
+    var control = document.createElement('div')
+    control.classList = ['control is-expanded']
+    addons.appendChild(control)
+
+    var selectbox = document.createElement('div')
+    selectbox.classList = ['select is-fullwidth']
+    selectbox.style['display'] = 'block'
+    control.appendChild(selectbox)
+
+    var select = document.createElement('select')
+    select.style['width'] = '100%'
+    select.name = 'world_edit_select'
+    selectbox.appendChild(select)
+
+    var option = document.createElement('option')
+    option.innerText = 'Set as ' + region.region_name
+    select.appendChild(option)
+    console.log(path)
+    select.addEventListener('change', function() { addRegions(level + 1, path) })
+
+    var keys = []
+    for (let reg in region.regions) {
+        keys.push(reg)
+    }
+    keys.sort()
+    console.log(keys)
+    for (let reg in keys) {
+        var option = document.createElement('option')
+        option.innerText = keys[reg]
+        select.appendChild(option)
+    }
+    if (selected) {
+        select.value = selected
+    }
+    return field
+
+}
+
+async function udpatePlaceSearch(place, newPath) {
+    places_search[place.id].path = newPath
+    console.log(places_search[place.id])
+    for (let r in place.regions) {
+        console.log(r)
+        udpatePlaceSearch(place.regions[r], newPath.concat([r]))
+    }
+
+}
+
+async function updatePlace(place, world, newPath, oldPath, newAncestor = false) {
+    console.log('updatePath : ', place, world, newPath, oldPath, newAncestor)
+    var newPlaceName = newPath[newPath.length - 1]
+    var update = {
+        'path': newPath.slice(0, newPath.length - 1),
+        'order': newPath.length - 1
+    }
+    if (newAncestor != false) {
+        update['ancestor'] = newAncestor
+    }
+    await updateDoc(doc(db, 'places', place.id), update)
+
+    // UPDATE WORLD
+    if (oldPath.length == 1) {
+        delete world[newPlaceName]
+    } else {
+        var oldPlace = world
+        for (let p = 0; p < oldPath.length - 1; p++) {
+            oldPlace = oldPlace[oldPath[p]].regions
+        }
+        delete oldPlace[newPlaceName]
+    }
+
+    if (newPath.length == 1) {
+        world[newPlaceName] = place
+    } else {
+        var data = world
+        for (let p = 0; p < newPath.length - 1; p++) {
+            data = data[newPath[p]].regions
+        }
+        data[newPlaceName] = place
+    }
+    console.log(world)
+    await updateDoc(doc(db, 'world', newPath[0]), world[newPath[0]])
+    await updateDoc(doc(db, 'world', oldPath[0]), world[oldPath[0]])
+
+    // UPDATE SEARCH
+    await udpatePlaceSearch(place, newPath)
+    await updateDoc(doc(db, 'searchs', 'places'), places_search)
+}
+
+async function submitWorldEdit(oldPath) {
+    var placeName = oldPath[oldPath.length - 1]
+    var alert = document.getElementById('worldEditAlert')
+    var newPath = []
+    var selects = document.getElementsByName('world_edit_select')
+    for (let s = 0; s < selects.length - 1; s++) {
+        newPath.push(selects[s].value)
+        console.log(selects[s].value)
+    }
+    if (selects[selects.length - 1].selectedIndex) {
+        alert.innerText = 'The last selected item has no sublevel, you cannot make ' + placeName + ' a descendent of this location. Please create a sublevel for this location if you wish to move ' + placeName + ' here.'
+        alert.hidden = false
+        return
+    }
+
+    newPath.push(placeName)
+    let oldPathText = ''
+    let subpath = true
+    for (let p = 0; p < oldPath.length; p++) {
+        if (!((p < newPath.length) & (newPath[p] == oldPath[p]))) {
+            subpath = false
+        }
+        oldPathText = oldPathText + '/' + oldPath[p]
+    }
+    let newPathText = ''
+    for (let p = 0; p < newPath.length; p++) {
+        newPathText = newPathText + '/' + newPath[p]
+    }
+    console.log(oldPathText, newPathText)
+    if (oldPathText == newPathText) {
+        alert.innerText = 'There is no change in position'
+        alert.hidden = false
+        return
+    } else if (subpath) {
+        alert.innerText = 'Place cannot be moved within itself'
+        alert.hidden = false
+        return
+    } else if (alert.hidden) {
+        let text = 'You are changing the position of ' + placeName + '.\n'
+        text = text + 'The old path was ' + oldPathText + '.\n'
+        text = text + 'The new path will be ' + newPathText + '.\n'
+        text = text + 'Are your sure you wish to do this?'
+        alert.innerText = text
+        alert.hidden = false
+        return
+    } else {
+        document.getElementById('loadingModal').classList.add('is-active')
+        document.getElementById('loadingMessage').innerText = 'We advise you go into place information to make sure no other changes are required to the place'
+    }
+
+    console.log(oldPath, newPath)
+        // RETRIEVING OLDPLACE
+    var place, newAncestor, oldAncestor
+    if (oldPath.length == 1) {
+        oldAncestor = null
+        place = world[oldPath[0]]
+    } else {
+        oldAncestor = world[oldPath[0]]
+        for (let p = 1; p < oldPath.length - 1; p++) {
+            oldAncestor = oldAncestor.regions[oldPath[p]]
+        }
+        place = oldAncestor.regions[placeName]
+        oldAncestor = oldAncestor.id
+    }
+    if (newPath.length == 1) {
+        newAncestor = deleteField()
+    } else {
+        newAncestor = world[newPath[0]]
+        for (let p = 1; p < newPath.length - 1; p++) {
+            newAncestor = newAncestor.regions[newPath[p]]
+        }
+        newAncestor = newAncestor.id
+    }
+    // UPDATE PLACES COLLECTION
+
+    console.log(place, oldAncestor, newAncestor)
+        // await updatePlace(place, world, newPath, oldPath, newAncestor = newAncestor)
+
+    location.reload()
+
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // Functions to open and close a modal

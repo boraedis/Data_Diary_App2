@@ -11,10 +11,11 @@ async function submitform() {
 
     // IMPORTS
     let distancewalked = document.getElementById('distancewalked').value
+    let workedout
     if (document.getElementById('workedout-yes').checked) {
-        let workedout = true
+        workedout = true
     } else {
-        let workedout = false
+        workedout = false
     }
 
     // DATA VALIDATION

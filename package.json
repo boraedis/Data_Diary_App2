@@ -10,6 +10,7 @@
     "author": "Bora Edis",
     "license": "ISC",
     "dependencies": {
+        "d3": "^7.4.4",
         "firebase": "^9.8.1"
     }
 }
