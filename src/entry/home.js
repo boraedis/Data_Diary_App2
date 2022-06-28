@@ -41,6 +41,7 @@ async function calculate2weeks(daynum, cols) {
     var column = document.getElementsByName('col')[0]
     var index = 1
     var day_docs = await getDocs(query(collection(db, 'days'), where('day', '>', daynum - 14), orderBy('day')))
+    var percents = []
     day_docs.forEach((day) => {
         var d = day.id
         days[d] = day.data()
@@ -49,10 +50,72 @@ async function calculate2weeks(daynum, cols) {
             if (typeof(days[d][cols[col]]) != 'undefined') { days[d].count++ }
         }
         console.log(column.childNodes, index)
+        percents[d] = days[d].count / cols.length
         column.childNodes[index].childNodes[0].childNodes[1].childNodes[0].value = days[d].count
         column.childNodes[index].childNodes[0].childNodes[1].childNodes[0].max = cols.length
         index++
     })
+    return percents
+}
+
+async function populate_day_content(daynum, percents) {
+    function make_cols(left, right) {
+        var cols = document.createElement('div')
+        cols.classList = ['columns']
+
+        var col = document.createElement('div')
+        col.classList = ['column']
+        col.innerHTML = '<strong>' + left + '</strong>'
+        col.style.padding = '0.25rem'
+        cols.append(col)
+
+        var col = document.createElement('div')
+        col.classList = ['column']
+        if (typeof(right) == 'object') {
+            col.appendChild(right)
+        } else {
+            col.innerHTML = right
+        }
+        cols.append(col)
+        col.style.padding = '0.25rem'
+        return cols
+    }
+    var day_content = document.getElementById('day_content')
+    day_content.appendChild(make_cols('Day', daynum))
+    const start = new Date('2016/02/16')
+    const today = new Date();
+    let rownum = Math.floor((today - start) / (1000 * 60 * 60 * 24))
+    day_content.appendChild(make_cols('% of Life', Math.round(rownum / daynum * 1000) / 10 + '%'))
+    let d = daynum
+    let incomplete = 0
+    while (percents[d] < 0.5) {
+        incomplete++
+        d--
+    }
+    day_content.appendChild(make_cols("Data missing", incomplete))
+
+    var input = document.createElement('input')
+    input.classList = ['input']
+    input.type = 'date'
+
+    var button = document.createElement('button')
+    button.classList = ['button']
+    button.style.width = '100%'
+    button.innerText = "Go"
+    button.addEventListener('click', function() {
+        let date = input.value
+        if (date != '') {
+            const goto = new Date(date)
+            const bday = new Date('2000/04/20');
+            let day = Math.floor((goto - bday) / (1000 * 60 * 60 * 24))
+            location = '/src/entry/entry_day.html?day=' + day
+        }
+    })
+
+    day_content.appendChild(make_cols("Go to Date", input))
+    day_content.appendChild(make_cols("", button))
+
+
 }
 
 async function main() {
@@ -74,7 +137,8 @@ async function main() {
     })
 
     document.getElementsByName('col')[0].childNodes[14].style['padding-bottom'] = '0rem'
-    calculate2weeks(daynum, cols)
+    var percents = await calculate2weeks(daynum, cols)
+    populate_day_content(daynum, percents)
 }
 
 

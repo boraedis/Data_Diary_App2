@@ -155,6 +155,7 @@ async function showLocation(place) {
     document.getElementById('place_edit_alert').hidden = true
     document.getElementById('place_id').innerText = selected_place.id
     document.getElementById('place_path').innerText = path_text
+    document.getElementById('place_subregion_name').innerText = selected_place.subregion_name
     document.getElementById('place_name').value = selected_place.name
     document.getElementById('place_streetname').value = selected_place.street_name
     document.getElementById('place_streetnum').value = selected_place.street_num
@@ -163,6 +164,7 @@ async function showLocation(place) {
     document.getElementById('place_subcategory').value = place['sub-category']
 
     document.getElementById('place_name').readOnly = true
+    document.getElementById('place_subregion_name').readOnly = true
     document.getElementById('place_streetname').readOnly = true
     document.getElementById('place_streetnum').readOnly = true
     document.getElementById('place_category').disabled = true
@@ -181,6 +183,7 @@ function place_edit() {
     editing = (!(editing))
     if (editing) {
         document.getElementById('place_name').readOnly = false
+        document.getElementById('place_subregion_name').readOnly = false
         document.getElementById('place_streetname').readOnly = false
         document.getElementById('place_streetnum').readOnly = false
         document.getElementById('place_category').disabled = false
@@ -212,11 +215,13 @@ function traverseRegions(region) {
 async function place_save() {
     var name_input = document.getElementById('place_name')
     name_input.classList = ['input']
+    document.getElementById('place_subregion_name').classList = ['input']
     var alert = document.getElementById('place_edit_alert')
     alert.hidden = true
     alert.innerText = ''
     var place_name = name_input.value
     var place_id = document.getElementById('place_id').innerText
+    var place_subregion_name = document.getElementById('place_subregion_name').value
     var place_streetname = document.getElementById('place_streetname').value
     var place_streetnum = document.getElementById('place_streetnum').value
     var place_category = document.getElementById('place_category').value
@@ -245,7 +250,6 @@ async function place_save() {
 
     var loadModal = document.getElementById('loadingModal')
     loadModal.classList.add('is-active')
-    var loadProg = document.getElementById('loadingProgress')
 
     if (place_name != selected_place.name) {
         var names = []
@@ -269,6 +273,7 @@ async function place_save() {
             country_data = await getDoc(doc(db, 'world', selected_place.name))
             country_data = country_data.data()
             data = country_data
+            data.subregion_name = place_subregion_name
             setDoc(doc(db, 'world', place_name), country_data)
             deleteDoc(doc(db, 'world', selected_place.name))
         } else {
@@ -278,6 +283,7 @@ async function place_save() {
             for (let p = 1; p < selected_place.path.length; p++) {
                 data = data.regions[selected_place.path[p]]
             }
+            data.subregion_name = place_subregion_name
             data.regions[place_name] = data.regions[selected_place.name]
             delete data.regions[selected_place.name]
             updateDoc(doc(db, 'world', selected_place.path[0]), country_data)
@@ -297,6 +303,7 @@ async function place_save() {
     selected_place.street_name = place_streetname
     selected_place.street_num = place_streetnum
     selected_place.category = place_category
+    selected_place.subregion_name = place_subregion_name
     selected_place['sub-category'] = place_subcategory
     if (selected_place.color) { selected_place.color = '#' + place_color }
 
@@ -527,10 +534,10 @@ async function worldEdit(path) {
 
 
     if (path.length == 1) {
-        var select = createSelect({ region_name: "Country", regions: world }, 0, [])
+        var select = createSelect({ subregion_name: "Country", regions: world }, 0, [])
         selects.appendChild(select)
     } else {
-        var select = createSelect({ region_name: "Country", regions: world }, 0, [], path[0])
+        var select = createSelect({ subregion_name: "Country", regions: world }, 0, [], path[0])
         selects.appendChild(select)
         for (let p = 1; p < path.length - 1; p++) {
             selects.appendChild(createSelect(data, p, path.slice(0, p), path[p]))
@@ -620,7 +627,7 @@ function createSelect(region, level, path, selected = false) {
 
     var label = document.createElement('label')
     label.classList = ['label']
-    label.innerText = region.region_name
+    label.innerText = region.subregion_name
     field.appendChild(label)
 
     var addons = document.createElement('div')
@@ -642,7 +649,7 @@ function createSelect(region, level, path, selected = false) {
     selectbox.appendChild(select)
 
     var option = document.createElement('option')
-    option.innerText = 'Set as ' + region.region_name
+    option.innerText = 'Set as ' + region.subregion_name
     select.appendChild(option)
     console.log(path)
     select.addEventListener('change', function() { addRegions(level + 1, path) })

@@ -58,7 +58,7 @@ function createSelect(region, level, path) {
 
     var label = document.createElement('label')
     label.classList = ['label']
-    label.innerText = region.region_name
+    label.innerText = region.subregion_name
     field.appendChild(label)
 
     var addons = document.createElement('div')
@@ -76,11 +76,11 @@ function createSelect(region, level, path) {
 
     var select = document.createElement('select')
     select.style['width'] = '100%'
-    select.name = 'select'
+    select.name = 'new_place_select'
     selectbox.appendChild(select)
 
     var option = document.createElement('option')
-    option.innerText = 'Add New ' + region.region_name
+    option.innerText = 'Add New ' + region.subregion_name
     select.appendChild(option)
     select.addEventListener('change', function() { addRegions(level + 1, path) })
 
@@ -186,7 +186,7 @@ async function addLevel(level, path) {
             data = data.regions[path[i]]
         }
         document.getElementById('path').innerText = pathstr
-        document.getElementById('region_name').innerText = data.region_name
+        document.getElementById('region_name').innerText = data.subregion_name
         document.getElementById('region').innerText = path[level - 1]
     }
 }
@@ -194,7 +194,8 @@ async function addLevel(level, path) {
 async function addRegions(level, path) {
     document.getElementById('subregion').style['display'] = 'none'
     console.log(level, path)
-    var selects = document.getElementsByTagName('select')
+    var selects = document.getElementsByName('new_place_select')
+    console.log(selects)
     var selection = selects[level].value
     console.log(location_fields.childNodes)
     while (location_fields.childNodes[level + 3]) {
@@ -236,7 +237,7 @@ async function addRegions(level, path) {
 
 function addSubLevel() {
     document.getElementById('addLevelModal').classList.add('is-active')
-    var selects = document.getElementsByName('select')
+    var selects = document.getElementsByName('new_place_select')
     console.log(selects[0])
     var data = world[selects[0].value]
     var pathstr = selects[0].value
@@ -257,10 +258,13 @@ async function createRegion() {
         console.log(data)
     }
     var subregion_name = document.getElementById('subregion_name').value
-    data['region_name'] = subregion_name
+    data['subregion_name'] = subregion_name
     data['regions'] = {}
 
-    // await updateDoc(doc(db, 'world', path[0]), world[path[0]])
+    await updateDoc(doc(db, 'world', path[0]), world[path[0]])
+    await updateDoc(doc(db, 'places', data.id), {
+        'subregion_name': subregion_name
+    })
     document.getElementById('addLevelModal').classList.remove('is-active')
     document.getElementById('path').innerText = ''
     document.getElementById('subregion_name').value = ''
@@ -282,7 +286,8 @@ async function newPlaceForm() {
     var street_name = document.getElementById('streetname').value
     var category = document.getElementById('category').value
     var subcategory = document.getElementById('subcategory').value
-    var selects = document.getElementsByName('select')
+    var selects = document.getElementsByName('new_place_select')
+    console.log(selects)
 
     if (document.getElementById('subregion').style['display'] != 'none') {
         alert.innerText = 'You must either add a new subregion to ' + selects[selects.length - 1].value + ' or unselect it'
@@ -364,8 +369,7 @@ async function newPlaceForm() {
         save['color'] = '#' + color_input.value
         console.log('color added')
     } else {
-        var ancestor = await getDoc(doc(db, 'places', ancestor_id))
-        save['ancestor'] = ancestor.id
+        save['ancestor'] = ancestor_id
     }
 
     var ref = await addDoc(collection(db, 'places'), save)
