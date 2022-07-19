@@ -2,6 +2,8 @@ import { collection, query, orderBy, doc, getDocs, setDoc, getDoc, where } from 
 
 import { db, app, auth } from "../firebaseInit.js";
 
+import { Configuration, PlaidApi, PlaidEnvironments } from 'plaid';
+
 function createTab(name, ref) {
     var link = document.createElement('a')
     link.href = 'entry_day.html?day=' + ref
@@ -145,31 +147,31 @@ async function createDays(bday, today, daynum) {
         console.log(max_day, date_cur)
         console.log('added')
     }
+}
 
+async function plaid_setup() {
+    const express = require('express');
+    const app = express();
+    app.use(express.json());
+    const { Configuration, PlaidApi, PlaidEnvironments } = require('plaid');
+    const configuration = new Configuration({
+        basePath: PlaidEnvironments[process.env.PLAID_ENV],
+        baseOptions: {
+            headers: {
+                'PLAID-CLIENT-ID': process.env.PLAID_CLIENT_ID,
+                'PLAID-SECRET': process.env.PLAID_SECRET,
+            },
+        },
+    });
+    const client = new PlaidApi(configuration);
 }
 
 async function main() {
+    plaid_setup()
     const bday = new Date('2000/04/20')
     const today = new Date();
     let daynum = Math.floor((today - bday) / (1000 * 60 * 60 * 24))
     document.getElementById('date').innerHTML = today.toDateString()
-    var datecur = new Date()
-    datecur.setDate(datecur.getDate() - 13)
-    for (let i = 0; i < 14; i++) {
-        var shortdate = (datecur.getMonth() + 1) + '/' + datecur.getDate() + '/' + (datecur.getYear() - 100)
-        document.getElementsByName('col')[0].appendChild(createTab(shortdate, daynum - 13 + i))
-        datecur.setDate(datecur.getDate() + 1)
-    }
-    createDays(bday, today, daynum)
-    var cats = await getDocs(collection(db, 'entry_structure'))
-    var cols = []
-    cats.forEach((cat) => {
-        cat.data().fields.forEach((col) => { cols.push(col) })
-    })
-
-    document.getElementsByName('col')[0].childNodes[14].style['padding-bottom'] = '0rem'
-    var percents = await calculate2weeks(daynum, cols)
-    populate_day_content(daynum, percents)
 }
 
 

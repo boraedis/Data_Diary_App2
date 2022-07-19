@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bora Edis</title>
+    <link rel="stylesheet" href="./../../css/mystyles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <div class="navbar-item">
+                    <a class="navbar-item" href="../index.html">
+                        Home
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item" href="home.html">
+                        <strong>Data Input</strong>
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="navbar-item">
+                        Graphs
+                    </a>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="signup.html" id="signup">
+                            Sign up
+                        </a>
+                        <a class="button is-light" href="login.html" id="loginout">
+                            Log in
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="height: 95%;">
+        <div class="tile is-ancestor is-fluid">
+            <div class="tile is-parent">
+                <article class="tile is-child notification is-secondary" style="text-align: center; border-radius: 15pt; padding-right: 1.5rem;">
+                    <p class="title" id="date"></p>
+                </article>
+            </div>
+            <div class="tile is-parent">
+                <article class="tile is-child notification is-secondary" style="text-align: center; border-radius: 15pt; padding-right: 1.5rem;">
+                    <p class="title">Entry History</p>
+                    <div class="tile notification is-primary is-vertical" name="col" style="border-radius: 10pt; padding-right: 0px;">
+                    </div>
+                </article>
+            </div>
+            <div class="tile is-parent">
+                <article class="tile is-child notification is-secondary" style="text-align: center; border-radius: 15pt; padding-right: 1.5rem;">
+
+                </article>
+
+            </div>
+        </div>
+    </div>
+    <script type="module" src="./../firebaseInit.js"></script>
+    <script type="module" src="home.js"></script>
+</body>
+
+
+</html>

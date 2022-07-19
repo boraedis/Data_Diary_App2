@@ -127,17 +127,16 @@ async function main() {
     document.getElementById('new_person_submit').addEventListener('click', submitNewPerson)
     people = people.data()
     for (let person in people) {
-        people[person].name = person
+        people[person].id = person
         people[person].selected = false
-        people[person].nicknames.push(person)
+        people[person].nicknames.push(people[person].name)
         var label = document.createElement('a')
         label.classList = ['tile notification is-primary']
         label.style['text-decoration'] = 'none'
         label.style['color'] = 'white'
         label.style['padding'] = '0.5rem'
-        label.innerText = person
-        console.log(person)
-        label.href = 'person.html?id=' + people[person].path._key.path.toString().split('/')[1]
+        label.innerText = people[person].name
+        label.href = 'person.html?id=' + person
         console.log(label.href)
         table.appendChild(label)
     }
