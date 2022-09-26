@@ -108,7 +108,7 @@ async function main() {
         console.log(cat.id, entered)
         var prog = document.getElementById(cat.id + '-progress')
         prog.value = entered
-        document.getElementById(cat.id + '-label').innerText = entered / prog.max * 100 + '%'
+        document.getElementById(cat.id + '-label').innerText = Math.round(entered / prog.max * 100) + '%'
         count++
     })
 }

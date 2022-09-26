@@ -204,9 +204,9 @@ function updateSeason(select, show, episodes) {
         var label = document.createElement('label')
         label.classList = ['checkbox']
         field.appendChild(label)
-
+        console.log(Object.keys(show.seasons[season][e]))
         let last = Object.keys(show.seasons[season][e]).sort(function(a, b) {
-            return a.asint() - b.asint();
+            return parseInt(a) - parseInt(b);
         })
         console.log(last)
         let day = parseInt(url_query['day'])
